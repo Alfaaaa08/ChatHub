@@ -1,0 +1,32 @@
+[
+    {
+        "id": "user-alice",
+        "username": "Alice",
+        "avatarUrl": "https://api.dicebear.com/9.x/avataaars/svg?seed=Alice",
+        "status": "online"
+    },
+    {
+        "id": "user-bob",
+        "username": "Bob",
+        "avatarUrl": "https://api.dicebear.com/9.x/avataaars/svg?seed=Bob",
+        "status": "away"
+    },
+    {
+        "id": "user-carol",
+        "username": "Carol",
+        "avatarUrl": "https://api.dicebear.com/9.x/avataaars/svg?seed=Carol",
+        "status": "online"
+    },
+    {
+        "id": "user-dave",
+        "username": "Dave",
+        "avatarUrl": "https://api.dicebear.com/9.x/avataaars/svg?seed=Dave",
+        "status": "offline"
+    },
+    {
+        "id": "user-eve",
+        "username": "Eve",
+        "avatarUrl": "https://api.dicebear.com/9.x/avataaars/svg?seed=Eve",
+        "status": "online"
+    }
+]

@@ -1,0 +1,37 @@
+[
+    {
+        "id": "room-general",
+        "name": "general",
+        "description": "General discussion for everyone",
+        "members": [
+            "user-alice",
+            "user-bob",
+            "user-carol",
+            "user-dave",
+            "user-eve"
+        ],
+        "createdAt": "2026-01-15T10:00:00.000Z"
+    },
+    {
+        "id": "room-random",
+        "name": "random",
+        "description": "Off-topic conversations and fun stuff",
+        "members": [
+            "user-alice",
+            "user-carol",
+            "user-eve"
+        ],
+        "createdAt": "2026-01-15T10:05:00.000Z"
+    },
+    {
+        "id": "room-dev-talk",
+        "name": "dev-talk",
+        "description": "Programming, tools, and tech discussions",
+        "members": [
+            "user-alice",
+            "user-bob",
+            "user-dave"
+        ],
+        "createdAt": "2026-01-15T10:10:00.000Z"
+    }
+]

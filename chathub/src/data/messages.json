@@ -1,0 +1,85 @@
+{
+    "room-general": [
+        {
+            "id": "msg-1",
+            "roomId": "room-general",
+            "userId": "user-alice",
+            "text": "Hey everyone! Welcome to ChatHub 👋",
+            "timestamp": "2026-03-25T09:00:00.000Z"
+        },
+        {
+            "id": "msg-2",
+            "roomId": "room-general",
+            "userId": "user-bob",
+            "text": "Thanks Alice! Glad to be here.",
+            "timestamp": "2026-03-25T09:01:30.000Z"
+        },
+        {
+            "id": "msg-3",
+            "roomId": "room-general",
+            "userId": "user-carol",
+            "text": "This looks great! How's everyone doing?",
+            "timestamp": "2026-03-25T09:03:00.000Z"
+        },
+        {
+            "id": "msg-4",
+            "roomId": "room-general",
+            "userId": "user-alice",
+            "text": "Doing well! Just setting up the new chat rooms.",
+            "timestamp": "2026-03-25T09:05:00.000Z"
+        },
+        {
+            "id": "msg-5",
+            "roomId": "room-general",
+            "userId": "user-dave",
+            "text": "Count me in! What channels do we have?",
+            "timestamp": "2026-03-25T09:10:00.000Z"
+        }
+    ],
+    "room-random": [
+        {
+            "id": "msg-6",
+            "roomId": "room-random",
+            "userId": "user-eve",
+            "text": "Anyone watched anything good lately?",
+            "timestamp": "2026-03-25T10:00:00.000Z"
+        },
+        {
+            "id": "msg-7",
+            "roomId": "room-random",
+            "userId": "user-carol",
+            "text": "I just finished a great series! Highly recommend it.",
+            "timestamp": "2026-03-25T10:05:00.000Z"
+        },
+        {
+            "id": "msg-8",
+            "roomId": "room-random",
+            "userId": "user-alice",
+            "text": "Oh nice, what was it about?",
+            "timestamp": "2026-03-25T10:06:00.000Z"
+        }
+    ],
+    "room-dev-talk": [
+        {
+            "id": "msg-9",
+            "roomId": "room-dev-talk",
+            "userId": "user-bob",
+            "text": "Has anyone tried Vue 3.4 yet? The defineModel macro is amazing.",
+            "timestamp": "2026-03-25T11:00:00.000Z"
+        },
+        {
+            "id": "msg-10",
+            "roomId": "room-dev-talk",
+            "userId": "user-alice",
+            "text": "Yes! It simplifies v-model on custom components so much.",
+            "timestamp": "2026-03-25T11:02:00.000Z"
+        },
+        {
+            "id": "msg-11",
+            "roomId": "room-dev-talk",
+            "userId": "user-dave",
+            "text": "I'm still getting used to Composition API. Coming from React, the reactivity model is different but I'm starting to like it.",
+            "timestamp": "2026-03-25T11:05:00.000Z"
+        }
+    ]
+}
