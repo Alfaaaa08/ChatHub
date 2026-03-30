@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-
 import BaseInput from '@/components/common/BaseInput.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseAvatar from '@/components/common/BaseAvatar.vue'
@@ -20,6 +19,7 @@ const isFormValid = computed(() => {
 function handleLogin() {
   if (!isFormValid.value) {
     errorMessage.value = 'Username must be at least 2 characters'
+
     return
   }
 
@@ -36,8 +36,10 @@ function handleLogin() {
     }
 
     localStorage.setItem('chathub-user', JSON.stringify(user))
+
     isLoading.value = false
-    router.push('/')
+
+    router.push({ name: 'chat' })
   }, 800)
 }
 
@@ -76,7 +78,7 @@ function clearError() {
       </form>
 
       <p class="login-footer">
-        No account needed — just pick a name and go
+        No account needed, just pick a name and go.
       </p>
     </div>
   </div>
