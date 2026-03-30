@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { RouterView, RouterLink, useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/authStore'
+import { useChatStore } from '@/stores/chatStore'
 import BaseAvatar from '@/components/common/BaseAvatar.vue'
+import BaseBadge from '@/components/common/BaseBadge.vue'
 
 const route = useRoute()
 const router = useRouter()
 
-const user = computed(() => {
-    const data = localStorage.getItem('chathub-user')
-    return data ? JSON.parse(data) : null
-})
+const authStore = useAuthStore()
+const chatStore = useChatStore()
+const { user } = storeToRefs(authStore)
+const { totalUnreadCount } = storeToRefs(chatStore)
 
 const navItems = [
-    { name: 'chat', label: 'Chats', icon: '💬', path: '/chat' },
-    { name: 'contacts', label: 'Contacts', icon: '👥', path: '/contacts' },
-    { name: 'settings', label: 'Settings', icon: '⚙️', path: '/settings' },
+    { name: 'chat', label: 'Chats', icon: '💬', path: '/chat', showBadge: true },
+    { name: 'contacts', label: 'Contacts', icon: '👥', path: '/contacts', showBadge: false },
+    { name: 'settings', label: 'Settings', icon: '⚙️', path: '/settings', showBadge: false },
 ]
 
 const currentSection = computed(() => {
@@ -22,7 +26,7 @@ const currentSection = computed(() => {
 })
 
 function handleLogout() {
-    localStorage.removeItem('chathub-user')
+    authStore.logout()
     router.push({ name: 'login' })
 }
 </script>
@@ -40,6 +44,8 @@ function handleLogout() {
                     :class="{ 'nav-item--active': currentSection === item.name }">
                     <span class="nav-item__icon">{{ item.icon }}</span>
                     <span class="nav-item__label">{{ item.label }}</span>
+                    <BaseBadge v-if="item.showBadge" :count="totalUnreadCount" variant="danger"
+                        class="nav-item__badge" />
                 </RouterLink>
             </nav>
 
@@ -140,6 +146,10 @@ function handleLogout() {
 .nav-item__label {
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
+}
+
+.nav-item__badge {
+    margin-left: auto;
 }
 
 .sidebar__footer {

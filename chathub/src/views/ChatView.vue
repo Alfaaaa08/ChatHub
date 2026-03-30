@@ -1,12 +1,42 @@
 <script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRoomStore } from '@/stores/roomStore'
+import { useChatStore } from '@/stores/chatStore'
+import { useContactStore } from '@/stores/contactStore'
+import BaseBadge from '@/components/common/BaseBadge.vue'
 
 const route = useRoute()
+const router = useRouter()
 
-const hasActiveRoom = computed(() => {
-    return !!route.params.roomId
-})
+const roomStore = useRoomStore()
+const chatStore = useChatStore()
+const contactStore = useContactStore()
+const { sortedRooms } = storeToRefs(roomStore)
+
+const hasActiveRoom = computed(() => !!route.params.roomId)
+
+function selectRoom(roomId: string) {
+    roomStore.setActiveRoom(roomId)
+    chatStore.markRoomAsRead(roomId)
+    router.push({ name: 'chat-room', params: { roomId } })
+}
+
+function getLastMessagePreview(roomId: string): string {
+    const msg = chatStore.getLastMessage(roomId)
+    if (!msg) return 'No messages yet'
+
+    const user = contactStore.getUserById(msg.userId)
+    const name = user?.username ?? 'Unknown'
+    const text = msg.text.length > 30 ? msg.text.slice(0, 30) + '...' : msg.text
+    return `${name}: ${text}`
+}
+
+function formatTime(timestamp: string): string {
+    const date = new Date(timestamp)
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
 </script>
 
 <template>
@@ -17,14 +47,24 @@ const hasActiveRoom = computed(() => {
             </div>
 
             <div class="rooms-list">
-                <RouterLink v-for="room in ['general', 'random', 'dev-talk']" :key="room" :to="`/chat/${room}`"
-                    class="room-item" :class="{ 'room-item--active': route.params.roomId === room }">
+                <button v-for="room in sortedRooms" :key="room.id" class="room-item"
+                    :class="{ 'room-item--active': route.params.roomId === room.id }" @click="selectRoom(room.id)">
                     <span class="room-item__icon">💬</span>
                     <div class="room-item__info">
-                        <span class="room-item__name">#{{ room }}</span>
-                        <span class="room-item__preview">Click to open this room</span>
+                        <div class="room-item__top">
+                            <span class="room-item__name">#{{ room.name }}</span>
+                            <span v-if="chatStore.getLastMessage(room.id)" class="room-item__time">
+                                {{ formatTime(chatStore.getLastMessage(room.id)!.timestamp) }}
+                            </span>
+                        </div>
+                        <div class="room-item__bottom">
+                            <span class="room-item__preview">
+                                {{ getLastMessagePreview(room.id) }}
+                            </span>
+                            <BaseBadge :count="chatStore.getUnreadCount(room.id)" variant="primary" />
+                        </div>
                     </div>
-                </RouterLink>
+                </button>
             </div>
         </div>
 
@@ -91,6 +131,8 @@ const hasActiveRoom = computed(() => {
         color var(--transition-fast);
     cursor: pointer;
     margin-bottom: var(--space-xs);
+    width: 100%;
+    text-align: left;
 }
 
 .room-item:hover {
@@ -109,22 +151,42 @@ const hasActiveRoom = computed(() => {
 }
 
 .room-item__info {
+    flex: 1;
     min-width: 0;
 }
 
+.room-item__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .room-item__name {
-    display: block;
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-base);
 }
 
+.room-item__time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.room-item__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2px;
+}
+
 .room-item__preview {
-    display: block;
     font-size: var(--font-size-xs);
     color: var(--color-text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex: 1;
+    margin-right: var(--space-sm);
 }
 
 .chat-view__content {

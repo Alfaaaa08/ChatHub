@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 import LoginView from '@/views/LoginView.vue'
 
 const router = createRouter({
@@ -11,16 +12,12 @@ const router = createRouter({
       component: LoginView,
       meta: { requiresAuth: false },
     },
-
     {
       path: '/',
       component: () => import('@/components/layout/AppLayout.vue'),
       meta: { requiresAuth: true },
       children: [
-        {
-          path: '',
-          redirect: '/chat',
-        },
+        { path: '', redirect: '/chat' },
         {
           path: 'chat',
           name: 'chat',
@@ -45,7 +42,6 @@ const router = createRouter({
         },
       ],
     },
-
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
@@ -55,15 +51,14 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _from, next) => {
-  const userData = localStorage.getItem('chathub-user')
-  const isAuthenticated = !!userData
+  const authStore = useAuthStore()
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'login' })
     return
   }
 
-  if (to.name === 'login' && isAuthenticated) {
+  if (to.name === 'login' && authStore.isAuthenticated) {
     next({ name: 'chat' })
     return
   }

@@ -1,52 +1,35 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/authStore'
 import BaseInput from '@/components/common/BaseInput.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseAvatar from '@/components/common/BaseAvatar.vue'
 
 const router = useRouter()
+const authStore = useAuthStore()
+const { isLoading } = storeToRefs(authStore)
 
 const username = ref('')
 const avatarUrl = ref('')
-const isLoading = ref(false)
 const errorMessage = ref('')
 
-const isFormValid = computed(() => {
-  return username.value.trim().length >= 2
-})
+const isFormValid = computed(() => username.value.trim().length >= 2)
 
-function handleLogin() {
+async function handleLogin() {
   if (!isFormValid.value) {
     errorMessage.value = 'Username must be at least 2 characters'
-
     return
   }
 
-  isLoading.value = true
   errorMessage.value = ''
-
-  setTimeout(() => {
-    const user = {
-      id: crypto.randomUUID(),
-      username: username.value.trim(),
-      avatarUrl: avatarUrl.value.trim() || null,
-      status: 'online' as const,
-      createdAt: new Date().toISOString(),
-    }
-
-    localStorage.setItem('chathub-user', JSON.stringify(user))
-
-    isLoading.value = false
-
-    router.push({ name: 'chat' })
-  }, 800)
+  await authStore.login(username.value, avatarUrl.value)
+  router.push({ name: 'chat' })
 }
 
 function clearError() {
-  if (errorMessage.value) {
-    errorMessage.value = ''
-  }
+  if (errorMessage.value) errorMessage.value = ''
 }
 </script>
 
@@ -77,9 +60,7 @@ function clearError() {
         </BaseButton>
       </form>
 
-      <p class="login-footer">
-        No account needed, just pick a name and go.
-      </p>
+      <p class="login-footer">No account needed — just pick a name and go</p>
     </div>
   </div>
 </template>
